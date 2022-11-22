@@ -1,0 +1,16 @@
+echo "# CCI" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/betatallarico/CCI.git
+git push -u origin main
+
+
+--ICU stays
+create or replace table cci_icu as
+select a.person_id, a.visit_occurrence_id, visit_start_date, visit_end_date, visit_detail_id, visit_detail_concept_id, visit_detail_start_date, visit_detail_end_date, visit_detail_start_datetime, visit_detail_end_datetime, a.care_site_id, datediff(hour,visit_detail_end_datetime, visit_detail_start_datetime) as hours_icu
+from omop_deid.visit_detail as a
+left join omop_deid.visit_occurrence as b
+on a.person_id=b.person_id and a.visit_occurrence_id=b.visit_occurrence_id
+where visit_detail_concept_id = 32037
